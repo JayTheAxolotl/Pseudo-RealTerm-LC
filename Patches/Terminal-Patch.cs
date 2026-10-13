@@ -1,5 +1,6 @@
 using System;
 using HarmonyLib;
+using UnityEngine;
 
 namespace Pseudo_RealTerm.Patches;
 
@@ -8,9 +9,19 @@ namespace Pseudo_RealTerm.Patches;
 public class Terminal_Patch
 {
     
-    public static bool exitingTerminal = false;
+    private static bool exitingTerminal = false;
     
-    public static bool oldTerminal = false;
+    private static bool oldTerminal = false;
+
+    private static TerminalNode TerminalNodeGenerator(string text, bool replace = true)
+    {
+        TerminalNode returnNode = ScriptableObject.CreateInstance<TerminalNode>();
+        
+        returnNode.displayText = text + "\n";
+        returnNode.clearPreviousText = replace; // If it replaces the previous text
+        
+        return returnNode;
+    }    
 
     [HarmonyPatch("BeginUsingTerminal")]
     [HarmonyPrefix]
@@ -18,6 +29,8 @@ public class Terminal_Patch
     {
         oldTerminal = false; // Reset to custom terminal
     }
+    
+    
     
     [HarmonyPatch("OnSubmit")]
     [HarmonyPrefix]
@@ -33,27 +46,27 @@ public class Terminal_Patch
             !exitingTerminal) // [ExitTerm]
         {
             __instance.terminalInUse = false; // Bypasses vanilla functionality, reset in postfix
-            if (__instance.textAdded == 0)
+            if (rawInputText.Replace(" ", "").Length == 0)
             {
                 __instance.screenText.ActivateInputField();
                 __instance.screenText.Select();
             }
-            else
+            else // Main functionality 
             {
-                TerminalNode returnNode = TerminalNode.CreateInstance<TerminalNode>();
+                string returnText = "Test text";
+                bool replaceText = false;
                 
                 // Proof of concept:
                 if (rawInputText == "old")
                 {
-                    returnNode.displayText = "You are now using the vanilla terminal \nexit to reset \n";
+                    returnText = "You are now using the vanilla terminal \n" +
+                                 "exit the terminal to reset";
+                    replaceText = true;
+                    
                     oldTerminal = true;
                 }
-                else
-                {
-                    returnNode = __instance.terminalNodes.specialNodes[1];
-                }
                 
-                __instance.LoadNewNode(returnNode);
+                __instance.LoadNewNode(TerminalNodeGenerator(returnText, replaceText));
                 
                 
                 // Copied from source, resets everything
@@ -82,6 +95,8 @@ public class Terminal_Patch
             exitingTerminal = false;
         }
     }
+    
+    
     
     // Exiting the terminal is weird, so this is to bypass my mod and do the vanilla stuff
     // "[ExitTerm]" means stuff related to this
