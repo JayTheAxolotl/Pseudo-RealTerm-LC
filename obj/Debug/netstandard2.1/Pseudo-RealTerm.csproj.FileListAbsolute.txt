@@ -1,9 +1,0 @@
-/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/bin/Debug/netstandard2.1/Pseudo-RealTerm.deps.json
-/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/bin/Debug/netstandard2.1/Pseudo-RealTerm.dll
-/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/obj/Debug/netstandard2.1/Pseudo-RealTerm.csproj.AssemblyReference.cache
-/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/obj/Debug/netstandard2.1/MyPluginInfo.cs
-/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/obj/Debug/netstandard2.1/Pseudo-RealTerm.GeneratedMSBuildEditorConfig.editorconfig
-/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/obj/Debug/netstandard2.1/Pseudo-RealTerm.AssemblyInfoInputs.cache
-/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/obj/Debug/netstandard2.1/Pseudo-RealTerm.AssemblyInfo.cs
-/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/obj/Debug/netstandard2.1/Pseudo-RealTerm.csproj.CoreCompileInputs.cache
-/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/obj/Debug/netstandard2.1/Pseudo-RealTerm.dll
