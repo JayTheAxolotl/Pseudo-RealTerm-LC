@@ -10,11 +10,19 @@ public class Terminal_Patch
     
     public static bool exitingTerminal = false;
     
+    public static bool oldTerminal = false;
+
+    [HarmonyPatch("BeginUsingTerminal")]
+    [HarmonyPrefix]
+    private static void BeginUsingTerminalPrefix(Terminal __instance)
+    {
+        oldTerminal = false; // Reset to custom terminal
+    }
+    
     [HarmonyPatch("OnSubmit")]
     [HarmonyPrefix]
     private static void OnSubmitPrefix(Terminal __instance)
     {
-        bool oldTerminal = false;
         
         string rawInputText =
             __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded); // This is copied from the decompiled source, wtf is this Zeekers
@@ -35,9 +43,10 @@ public class Terminal_Patch
                 TerminalNode returnNode = TerminalNode.CreateInstance<TerminalNode>();
                 
                 // Proof of concept:
-                if (rawInputText == "test")
+                if (rawInputText == "old")
                 {
-                    returnNode.displayText = "test";
+                    returnNode.displayText = "You are now using the vanilla terminal \nexit to reset \n";
+                    oldTerminal = true;
                 }
                 else
                 {
