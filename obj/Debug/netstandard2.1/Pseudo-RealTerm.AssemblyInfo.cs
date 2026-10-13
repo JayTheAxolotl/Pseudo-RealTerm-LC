@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Pseudo-RealTerm")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c80f2ffa1ed794b36a4241b6f0b68087714fd90")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+65e50b05de0b3bdadb756912ba5219f8fae93ed1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Pseudo-RealTerm")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Pseudo-RealTerm")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
