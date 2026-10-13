@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "YyHNCOQyZJc=",
-  "success": false,
+  "dgSpecHash": "ViufgBZNCpA=",
+  "success": true,
   "projectFilePath": "/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/Pseudo-RealTerm.csproj",
   "expectedPackageFiles": [
     "/home/jacob/.nuget/packages/bepinex.analyzers/1.0.8/bepinex.analyzers.1.0.8.nupkg.sha512",
@@ -44,20 +44,8 @@
     "/home/jacob/.nuget/packages/system.threading/4.3.0/system.threading.4.3.0.nupkg.sha512",
     "/home/jacob/.nuget/packages/system.threading.tasks/4.3.0/system.threading.tasks.4.3.0.nupkg.sha512",
     "/home/jacob/.nuget/packages/teambmx.lobbycompatibility/1.5.1/teambmx.lobbycompatibility.1.5.1.nupkg.sha512",
-    "/home/jacob/.nuget/packages/unityengine.modules/2022.3.9/unityengine.modules.2022.3.9.nupkg.sha512",
+    "/home/jacob/.nuget/packages/unityengine.modules/2022.3.62/unityengine.modules.2022.3.62.nupkg.sha512",
     "/home/jacob/.nuget/packages/netstandard.library.ref/2.1.0/netstandard.library.ref.2.1.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Warning As Error: Detected package downgrade: UnityEngine.Modules from 2022.3.62 to 2022.3.9. Reference the package directly from the project to select a different version. \n Pseudo-RealTerm -> LethalCompany.GameLibs.Steam 81.0.5-ngd.0 -> UnityEngine.Modules (>= 2022.3.62) \n Pseudo-RealTerm -> UnityEngine.Modules (>= 2022.3.9)",
-      "projectPath": "/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/Pseudo-RealTerm.csproj",
-      "filePath": "/home/jacob/Projects/BepInEx/Lethal/Pseudo-RealTerm/Pseudo-RealTerm.csproj",
-      "libraryId": "UnityEngine.Modules",
-      "targetGraphs": [
-        "netstandard2.1"
-      ]
-    }
-  ]
+  "logs": []
 }

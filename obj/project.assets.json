@@ -657,7 +657,7 @@
           "lib/netstandard2.1/BMX.LobbyCompatibility.dll": {}
         }
       },
-      "UnityEngine.Modules/2022.3.9": {
+      "UnityEngine.Modules/2022.3.62": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/UnityEngine.AIModule.dll": {},
@@ -2710,10 +2710,10 @@
         "teambmx.lobbycompatibility.nuspec"
       ]
     },
-    "UnityEngine.Modules/2022.3.9": {
-      "sha512": "sSxqZjd05U0NWlX+eappdlsEuXFvDRHkUaClDVTocGRzCmIwNvgGJIPh22lGklIpNZ3cJZneYJkIUnEIazR8VA==",
+    "UnityEngine.Modules/2022.3.62": {
+      "sha512": "zpu5dELUCFt7Rvvzp50iTrfVusJg+2gmlcaytGEoHYuIP+AOv57X272czjp+sA8N1onPo/IiHFnOEFtT9rLJBA==",
       "type": "package",
-      "path": "unityengine.modules/2022.3.9",
+      "path": "unityengine.modules/2022.3.62",
       "files": [
         ".nupkg.metadata",
         "lib/net35/UnityEngine.AIModule.dll",
@@ -2914,7 +2914,7 @@
         "lib/netstandard2.0/UnityEngine.WindModule.dll",
         "lib/netstandard2.0/UnityEngine.XRModule.dll",
         "lib/netstandard2.0/UnityEngine.dll",
-        "unityengine.modules.2022.3.9.nupkg.sha512",
+        "unityengine.modules.2022.3.62.nupkg.sha512",
         "unityengine.modules.nuspec"
       ]
     }
@@ -2926,7 +2926,7 @@
       "BepInEx.PluginInfoProps >= 2.*",
       "LethalCompany.GameLibs.Steam >= *-*",
       "TeamBMX.LobbyCompatibility >= 1.*",
-      "UnityEngine.Modules >= 2022.3.9"
+      "UnityEngine.Modules >= 2022.3.62"
     ]
   },
   "packageFolders": {
@@ -3005,7 +3005,7 @@
             "include": "Compile",
             "suppressParent": "All",
             "target": "Package",
-            "version": "[2022.3.9, )"
+            "version": "[2022.3.62, )"
           }
         },
         "imports": [
@@ -3033,16 +3033,5 @@
         "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.112/RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Warning As Error: Detected package downgrade: UnityEngine.Modules from 2022.3.62 to 2022.3.9. Reference the package directly from the project to select a different version. \n Pseudo-RealTerm -> LethalCompany.GameLibs.Steam 81.0.5-ngd.0 -> UnityEngine.Modules (>= 2022.3.62) \n Pseudo-RealTerm -> UnityEngine.Modules (>= 2022.3.9)",
-      "libraryId": "UnityEngine.Modules",
-      "targetGraphs": [
-        "netstandard2.1"
-      ]
-    }
-  ]
+  }
 }
