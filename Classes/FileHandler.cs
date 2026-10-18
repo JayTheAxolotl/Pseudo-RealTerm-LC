@@ -7,32 +7,37 @@ using LethalModDataLib.Helpers;
 
 namespace Pseudo_RealTerm.Classes;
 
-public struct File
-{
-    public string Name;
-    public string Path;
-    public string Type;
-    public bool IsDirectory;
-    public string Contents;
-}
-
 public static class FileHandler
 {
     
-    [ModData(SaveWhen.OnSave, LoadWhen.Manual, SaveLocation.CurrentSave)]
+    [ModData(SaveWhen.Manual, LoadWhen.Manual, SaveLocation.CurrentSave)]
     public static List<File> FileList { get; set; } = [];
-    public static string[] FileNameToPath(string filename)
+    
+    /// Converts a full path to a name and directory string
+    public static string[] SplitFullPath(string fullPath)
     {
-        if (!filename.Contains("/")) { return [filename, ""]; }
+        if (!fullPath.Contains("/")) { return [fullPath, ""]; }
         
-        if (filename.EndsWith("/")) {filename.Remove(filename.Length - 1, 1);}
+        if (fullPath.EndsWith("/")) {fullPath.Remove(fullPath.Length - 1, 1);}
         
-        string[] dirsAndFile = filename.Split('/');
-        string finalFilename = dirsAndFile[dirsAndFile.Length - 1];
+        string[] dirsAndFile = fullPath.Split('/');
+        string finalFilename = dirsAndFile[^1];
         dirsAndFile.SetValue("", dirsAndFile.Length - 1);
-        string dirs = dirsAndFile.Join(delimiter: "/");
+        string directoryString = dirsAndFile.Join(delimiter: "/");
         
-        return [finalFilename, dirs];
+        return [finalFilename, directoryString];
+    }
+
+    public static bool FileExits(File file)
+    {
+        foreach (File f in FileList)
+        {
+            if (file.Name == f.Name && file.Directory.ToString() == f.Directory.ToString())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void LoadFiles()

@@ -16,12 +16,41 @@ public static class ls
                              "--help : display this text";
         const bool replaceText = false;
         
-        string returnText = "";     
-        
+        string returnText = "";
+
+        if (line.arguments.Count > 0)
+        {
+            string[] splitArgumentsPath = FileHandler.SplitFullPath(line.arguments[0]);
+            if (splitArgumentsPath[1] != "")
+            {
+                line.LineDirectory = new Directory();
+            }
+        }
+
         FileHandler.LoadFiles();
         foreach (var file in FileHandler.FileList)
         {
-            returnText += file.Name + "   ";
+            if (file.Directory.ToString() == line.LineDirectory.ToString())
+            {
+                returnText += file.Name + "   ";
+            }
+        }
+        
+        DirectoryHandler.LoadDirs();
+        foreach (var directory in DirectoryHandler.DirectoryList)
+        {
+            Pseudo_RealTerm.Logger.LogMessage(directory.ToString().Replace(line.LineDirectory.ToString(), ""));
+            Pseudo_RealTerm.Logger.LogMessage(directory.ToString());
+            Pseudo_RealTerm.Logger.LogMessage(line.LineDirectory.ToString());
+            // Two of these because it removes both "/"s when in the root directory
+            if (directory.ToString().Replace(line.LineDirectory.ToString(), "") == directory.Path[^1])
+            {
+                returnText += directory.ToString().Replace(line.LineDirectory.ToString(), "") + "/   ";
+            }
+            else if (directory.ToString().Replace(line.LineDirectory.ToString(), "") == directory.Path[^1] + "/")
+            {
+                returnText += directory.ToString().Replace(line.LineDirectory.ToString(), "") + "   ";
+            }
         }
 
         if (line.options.Contains("--help"))

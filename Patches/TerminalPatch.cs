@@ -9,11 +9,11 @@ namespace Pseudo_RealTerm.Patches;
 public class TerminalPatch
 {
     
-    private static bool exitingTerminal = false;
+    private static bool _exitingTerminal = false;
     
-    public static bool oldTerminal = false;
-    
-    private static string currentDirectory = "/";
+    public static bool OldTerminal = false;
+
+    public static Directory CurrentDirectory = new Directory();
 
     public static void WriteToTerminal(string text, Terminal instance, bool replace = true)
     {
@@ -36,11 +36,12 @@ public class TerminalPatch
     [HarmonyPostfix]
     private static void BeginUsingTerminalPostfix(Terminal __instance)
     {
-        oldTerminal = false; // Reset to custom terminal
+        OldTerminal = false; // Reset to custom terminal
+
+        CurrentDirectory.IsAbsolute = true;
+        CurrentDirectory.Path = [];
         
-        currentDirectory = "/";
-        
-        WriteToTerminal("PseudoS v0.1\n" + 
+        WriteToTerminal("PseudoS v0.2\n" + 
                         "Type \"help\" for help", __instance);
     }
     
@@ -54,8 +55,8 @@ public class TerminalPatch
         string rawInputText =
             __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded); // This is copied from the decompiled source, wtf is this Zeekers
 
-        if (!oldTerminal && 
-            !exitingTerminal) // [ExitTerm]
+        if (!OldTerminal && 
+            !_exitingTerminal) // [ExitTerm]
         {
             __instance.terminalInUse = false; // Bypasses vanilla functionality, reset in postfix
             if (rawInputText.Replace(" ", "").Length == 0)
@@ -66,16 +67,14 @@ public class TerminalPatch
             else // Main functionality 
             {
                 TermLine line = new TermLine(rawInputText);
-                line.Directory = currentDirectory;
+                line.LineDirectory = CurrentDirectory;
                 
                 foreach (var command in TerminalCommandAttributeCollector.Commands) // For each command that was collected
                 {
-                    Pseudo_RealTerm.Logger.LogMessage(command);
                     if ((string) command.GetField("Command").GetValue(null) // equivalent to old.Command == line.Command and etc
                         == line.Command)
                     { command.GetMethod("Run")?.Invoke(null, [__instance, line]); } // equivalent to old.Run(__instance, line) and etc
                 }
-                
                 
                 // Copied from source, resets everything
                 __instance.modifyingText = true;
@@ -93,14 +92,14 @@ public class TerminalPatch
     [HarmonyPostfix]
     private static void OnSubmitPostfix(Terminal __instance)
     {   
-        if (!exitingTerminal)
+        if (!_exitingTerminal)
         {
             __instance.terminalInUse = true;
         }
         else
         {   // [ExitTerm]
             __instance.terminalInUse = false;
-            exitingTerminal = false;
+            _exitingTerminal = false;
         }
     }
     
@@ -112,7 +111,7 @@ public class TerminalPatch
     [HarmonyPrefix]
     private static void QuitTerminalPrefix(Terminal __instance)
     {
-        exitingTerminal = true;
+        _exitingTerminal = true;
     }
     
 }

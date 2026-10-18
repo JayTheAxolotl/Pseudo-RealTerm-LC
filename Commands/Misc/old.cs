@@ -16,7 +16,7 @@ public static class old
         
         const bool replaceText = true;
         
-        TerminalPatch.oldTerminal = true;
+        TerminalPatch.OldTerminal = true;
         
         TerminalPatch.WriteToTerminal(returnText, instance, replaceText);
     }

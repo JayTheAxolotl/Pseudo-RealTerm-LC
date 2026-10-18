@@ -22,17 +22,26 @@ public static class touch
 
         if (line.arguments.Count > 0)
         {
-            string[] dirAndName = FileHandler.FileNameToPath(line.arguments[0]);
-            if (!dirAndName[1].StartsWith("/")) {dirAndName[1] = line.Directory + dirAndName[1];} // Relative path if absolute is not given
+            string[] dirAndName = FileHandler.SplitFullPath(line.arguments[0]);
+            if (!dirAndName[1].StartsWith("/")) {dirAndName[1] = line.LineDirectory + dirAndName[1];} // Relative path if absolute is not given
                         
             returnText = "made file: \"" + dirAndName[0] + "\" at \"" + dirAndName[1] + "\"" ;
                         
-            File newFile = new File();
-            newFile.Name = dirAndName[0];
-            newFile.Path = dirAndName[1];
-            FileHandler.FileList.Add(newFile);
-            
-            FileHandler.SaveFiles();
+            File newFile = new File
+            {
+                Name = dirAndName[0],
+                Directory = DirectoryHandler.StringToDirectory(dirAndName[1])
+            };
+
+            if (FileHandler.FileExits(newFile))
+            {
+                returnText = "File already exists";
+            }
+            else
+            {
+                FileHandler.FileList.Add(newFile);
+                FileHandler.SaveFiles();
+            }
         }
         else
         { returnText = "No arguments given\n" + usage; }
