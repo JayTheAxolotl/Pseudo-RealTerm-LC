@@ -1,8 +1,8 @@
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using LobbyCompatibility.Attributes;
-using LobbyCompatibility.Enums;
+using Pseudo_RealTerm.Classes;
+using Pseudo_RealTerm.Commands;
 
 namespace Pseudo_RealTerm;
 
@@ -22,6 +22,8 @@ public class Pseudo_RealTerm : BaseUnityPlugin
         Patch();
 
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+        
+        TerminalCommandAttributeCollector.RegisterTerminalLineAttributes();
     }
 
     internal static void Patch()

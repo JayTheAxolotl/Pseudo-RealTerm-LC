@@ -1,0 +1,30 @@
+using Pseudo_RealTerm.Attributes;
+using Pseudo_RealTerm.Classes;
+using Pseudo_RealTerm.Patches;
+
+namespace Pseudo_RealTerm.Commands;
+
+[TerminalCommand]
+public static class COMMANDNAME
+{
+    public static string Command = "COMMANDNAME";
+    
+    public static void Run(Terminal instance, TermLine line)
+    {
+        const string usage = "COMMANDNAME [options] [arguments]\n" +
+                "Options:\n" +
+                "--help : display this text";
+        const bool replaceText = false;
+        
+        string returnText;
+                    
+        // Main Code Here
+
+        if (line.options.Contains("--help"))
+        {
+            returnText = usage;
+        }
+        
+        TerminalPatch.WriteToTerminal(returnText, instance, replaceText);
+    }
+}

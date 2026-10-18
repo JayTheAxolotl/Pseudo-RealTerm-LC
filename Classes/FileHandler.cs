@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using HarmonyLib;
 using LethalModDataLib.Attributes;
 using LethalModDataLib.Enums;
+using LethalModDataLib.Features;
+using LethalModDataLib.Helpers;
 
 namespace Pseudo_RealTerm.Classes;
 
@@ -31,5 +33,19 @@ public static class FileHandler
         string dirs = dirsAndFile.Join(delimiter: "/");
         
         return [finalFilename, dirs];
+    }
+
+    public static void LoadFiles()
+    {
+        SaveLoadHandler.LoadData(ModDataHelper.GetModDataKey(
+            typeof(FileHandler), 
+            nameof(FileList)));
+    }
+
+    public static void SaveFiles()
+    {
+        SaveLoadHandler.SaveData(ModDataHelper.GetModDataKey(
+            typeof(FileHandler), 
+            nameof(FileList)));
     }
 }

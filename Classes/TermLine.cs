@@ -3,40 +3,41 @@ using System.Linq;
 
 namespace Pseudo_RealTerm.Classes;
 
-public class termLine // Class for parsing lines in the terminal
+public class TermLine // Class for parsing lines in the terminal
 {
 
-    public string command;
-    public string[] rawLine;
+    public string Command;
+    public string Directory = "/";
+    public string[] RawLine;
     
     public List<string> arguments = new List<string>(); // Set so they are never null
     public List<string> options = new List<string>();
     
-    public termLine(string rawLine)
+    public TermLine(string rawLine)
     {
-        this.rawLine = rawLine.ToLower().Split(' ');
-        this.command = this.rawLine[0];
+        this.RawLine = rawLine.ToLower().Split(' ');
+        this.Command = this.RawLine[0];
         
-        // i starts at 1 to skip this.command
-        for (int i = 1; i < this.rawLine.Length; i++)
+        // i starts at 1 to skip this.Command
+        for (int i = 1; i < this.RawLine.Length; i++)
         {
             // If it is an option, add it to options
-            if (this.rawLine[i].StartsWith("-")) 
-            { this.options.Add(this.rawLine[i]); }
+            if (this.RawLine[i].StartsWith("-")) 
+            { this.options.Add(this.RawLine[i]); }
             else // If it isn't then it's an argument
-            { this.arguments.Add(this.rawLine[i]); }
+            { this.arguments.Add(this.RawLine[i]); }
         }
         
     }
     
     public void debugPrint()
     {
-        foreach (var thing in this.rawLine)
+        foreach (var thing in this.RawLine)
         {
             Pseudo_RealTerm.Logger.LogMessage("thing: " + thing);
         }
         
-        Pseudo_RealTerm.Logger.LogMessage("command " + this.command);
+        Pseudo_RealTerm.Logger.LogMessage("Command " + this.Command);
         
         foreach (var option in this.options)
         {
