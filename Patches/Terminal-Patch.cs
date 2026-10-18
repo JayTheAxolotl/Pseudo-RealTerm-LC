@@ -1,4 +1,7 @@
+using System.Runtime.CompilerServices;
 using HarmonyLib;
+using LethalModDataLib.Features;
+using LethalModDataLib.Helpers;
 using Pseudo_RealTerm.Classes;
 using UnityEngine;
 
@@ -6,12 +9,14 @@ namespace Pseudo_RealTerm.Patches;
 
 [HarmonyPatch(typeof(Terminal))]
 
-public class Terminal_Patch
+public class TerminalPatch
 {
     
     private static bool exitingTerminal = false;
     
     private static bool oldTerminal = false;
+
+    private static string currentDirectory = "/";
 
     private static TerminalNode WriteToTerminal(string text, string lastText, bool replace = true)
     {
@@ -34,6 +39,8 @@ public class Terminal_Patch
     private static void BeginUsingTerminalPostfix(Terminal __instance)
     {
         oldTerminal = false; // Reset to custom terminal
+        
+        currentDirectory = "/";
         
         __instance.LoadNewNode(WriteToTerminal("PseudoS v0.1\n" +
                                                "Type \"help\" for help",
@@ -65,7 +72,7 @@ public class Terminal_Patch
                 string returnText = "";
                 bool replaceText = false;
                 termLine line = new termLine(rawInputText);
-                string usage;
+                string usage = "";
                 
                 
                 if (line.command == "old")
@@ -75,7 +82,8 @@ public class Terminal_Patch
                     replaceText = true;
                     
                     oldTerminal = true;
-                } else if (line.command == "echo")
+                } 
+                else if (line.command == "echo")
                 {
                     usage = "echo [options] [arguments]\n" +
                             "Options:\n" +
@@ -86,20 +94,67 @@ public class Terminal_Patch
                     else
                     { returnText = "No arguments given\n" + usage; }
                     
-                    if (line.options.Contains("--help")) { returnText = usage; } // help text
-                    
-                } else if (line.command == "clear")
+                } 
+                else if (line.command == "clear")
                 {
                     returnText = "";
                     replaceText = true;
-                } else if (line.command == "help")
+                } 
+                else if (line.command == "help")
                 {
                     usage = "old                        : switch to vanilla terminal\n" +
                             "echo [options] [arguments] : repeat what is told to it\n" +
                             "clear                      : clear the terminal";
                     returnText = usage;
                 }
+                else if (line.command == "touch")
+                {
+                    usage = "touch [options] [filename]\n"+ 
+                            "Options:\n" + 
+                            "--help : display this text";
+
+                    SaveLoadHandler.LoadData(ModDataHelper.GetModDataKey(
+                        typeof(FileHandler), 
+                        nameof(FileHandler.FileList)));
+
+                    if (line.arguments.Count > 0)
+                    {
+                        string[] dirAndName = FileHandler.FileNameToPath(line.arguments[0]);
+                        if (!dirAndName[1].StartsWith("/")) {dirAndName[1] = currentDirectory + dirAndName[1];} // Relative path if absolute is not given
+                        
+                        returnText = "made file: \"" + dirAndName[0] + "\" at \"" + dirAndName[1] + "\"" ;
+                        
+                        File newFile = new File();
+                        newFile.Name = dirAndName[0];
+                        newFile.Path = dirAndName[1];
+                        FileHandler.FileList.Add(newFile);
+                        
+                        SaveLoadHandler.SaveData(ModDataHelper.GetModDataKey(
+                            typeof(FileHandler), 
+                            nameof(FileHandler.FileList)));
+                        
+                    }
+                    else
+                    { returnText = "No arguments given\n" + usage; }
+                }
+                else if (line.command == "ls")
+                {
+                    usage = "ls [options] [dir]\n"+ 
+                            "Options:\n" + 
+                            "--help : display this text";
+                    
+                    SaveLoadHandler.LoadData(ModDataHelper.GetModDataKey(
+                        typeof(FileHandler), 
+                        nameof(FileHandler.FileList)));
+                    
+                    returnText = "";
+                    foreach (var file in FileHandler.FileList)
+                    {
+                        returnText += file.Name + "   ";
+                    }
+                }
                 
+                if (line.options.Contains("--help")) { returnText = usage; } // help text
                 __instance.LoadNewNode(WriteToTerminal(returnText, __instance.screenText.text, replaceText));
                 
                 

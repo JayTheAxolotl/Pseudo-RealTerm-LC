@@ -7,6 +7,7 @@ using LobbyCompatibility.Enums;
 namespace Pseudo_RealTerm;
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+[BepInDependency(LethalModDataLib.PluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
 public class Pseudo_RealTerm : BaseUnityPlugin
 {
     public static Pseudo_RealTerm Instance { get; private set; } = null!;
