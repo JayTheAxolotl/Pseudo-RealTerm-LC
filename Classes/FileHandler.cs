@@ -23,7 +23,7 @@ public static class FileHandler
         string[] dirsAndFile = fullPath.Split('/');
         string finalFilename = dirsAndFile[^1];
         dirsAndFile.SetValue("", dirsAndFile.Length - 1);
-        string directoryString = dirsAndFile.Join(delimiter: "/");
+        string directoryString = dirsAndFile.Join(delimiter: "/") + "/";
         
         return [finalFilename, directoryString];
     }
@@ -38,6 +38,14 @@ public static class FileHandler
             }
         }
         return false;
+    }
+    
+    public static void DebugPrintAll()
+    {
+        foreach (var file in FileList)
+        {
+            Pseudo_RealTerm.Logger.LogMessage("File at: " + file.Directory.ToString());
+        }
     }
 
     public static void LoadFiles()

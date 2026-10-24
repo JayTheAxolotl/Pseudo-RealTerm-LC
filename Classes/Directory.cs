@@ -10,7 +10,7 @@ public class Directory
 
     public override string ToString()
     {
-        if (IsAbsolute && Path.Count == 0) { return "/"; } 
+        if (IsAbsolute && (Path.Count == 0 || Path[0] == "")) { return "/"; } 
         if (IsAbsolute) {return "/" + Path.Join(delimiter: "/") + "/";}
         return Path.Join(delimiter: "/") + "/";
     }
@@ -24,5 +24,14 @@ public class Directory
         {
             Path.Add(part);
         }
+    }
+
+    public bool IsSubdirOf(Directory possibleParent)
+    {
+        if (IsAbsolute && possibleParent.IsAbsolute)
+        {
+            if (ToString().StartsWith(possibleParent.ToString())) { return true; }
+        }
+        return false;
     }
 }

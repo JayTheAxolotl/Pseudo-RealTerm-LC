@@ -39,9 +39,6 @@ public static class ls
         DirectoryHandler.LoadDirs();
         foreach (var directory in DirectoryHandler.DirectoryList)
         {
-            Pseudo_RealTerm.Logger.LogMessage(directory.ToString().Replace(line.LineDirectory.ToString(), ""));
-            Pseudo_RealTerm.Logger.LogMessage(directory.ToString());
-            Pseudo_RealTerm.Logger.LogMessage(line.LineDirectory.ToString());
             // Two of these because it removes both "/"s when in the root directory
             if (directory.ToString().Replace(line.LineDirectory.ToString(), "") == directory.Path[^1])
             {

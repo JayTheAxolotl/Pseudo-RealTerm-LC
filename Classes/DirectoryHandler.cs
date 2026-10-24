@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Dissonance;
 using LethalModDataLib.Attributes;
 using LethalModDataLib.Enums;
 using LethalModDataLib.Features;
@@ -36,6 +37,14 @@ public static class DirectoryHandler
             }
         }
         return false;
+    }
+
+    public static void DebugPrintAll()
+    {
+        foreach (var directory in DirectoryList)
+        {
+            Pseudo_RealTerm.Logger.LogMessage("Directory at: " + directory.ToString());
+        }
     }
     
     public static void LoadDirs()

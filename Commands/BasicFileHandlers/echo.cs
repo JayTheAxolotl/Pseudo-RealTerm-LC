@@ -1,3 +1,4 @@
+using System;
 using HarmonyLib;
 using Pseudo_RealTerm.Attributes;
 using Pseudo_RealTerm.Classes;
@@ -18,9 +19,66 @@ public static class echo
         const bool replaceText = false;
         
         string returnText;
-                    
+
         if (line.arguments.Count > 0)
-        { returnText = line.arguments.Join(delimiter: " ") + "\n"; }
+        {
+            returnText = line.arguments.Join(delimiter: " ") + "\n";
+
+            if (line.arguments.Contains(">"))
+            {
+                var text = new ArraySegment<string>(line.arguments.ToArray(), 0, line.arguments.IndexOf(">") + 1);
+                var filePath = line.arguments[line.arguments.IndexOf(">") + 1];
+                
+                string[] splitFilePath;
+                if (filePath.StartsWith("/"))
+                {
+                    splitFilePath = FileHandler.SplitFullPath(filePath);
+                }
+                else
+                {
+                    splitFilePath = FileHandler.SplitFullPath(line.LineDirectory.ToString() + filePath);
+                }
+                
+                FileHandler.LoadFiles();
+                foreach (var file in FileHandler.FileList)
+                {
+                    if (file.Name == splitFilePath[0] && file.Directory.ToString() == splitFilePath[1])
+                    {
+                        file.Contents = text.Join(delimiter: " ");
+                        FileHandler.SaveFiles();
+                        break;
+                    }
+                }
+            }
+            
+            if (line.arguments.Contains(">>"))
+            {
+                var text = new ArraySegment<string>(line.arguments.ToArray(), 0, line.arguments.IndexOf(">>") + 1);
+                var filePath = line.arguments[line.arguments.IndexOf(">>") + 1];
+                
+                string[] splitFilePath;
+                if (filePath.StartsWith("/"))
+                {
+                    splitFilePath = FileHandler.SplitFullPath(filePath);
+                }
+                else
+                {
+                    splitFilePath = FileHandler.SplitFullPath(line.LineDirectory.ToString() + filePath);
+                }
+                
+                FileHandler.LoadFiles();
+                foreach (var file in FileHandler.FileList)
+                {
+                    if (file.Name == splitFilePath[0] && file.Directory.ToString() == splitFilePath[1])
+                    {
+                        file.Contents += text.Join(delimiter: " ");
+                        FileHandler.SaveFiles();
+                        break;
+                    }
+                }
+            }
+                
+        }
         else
         { returnText = "No arguments given\n" + usage; }
 

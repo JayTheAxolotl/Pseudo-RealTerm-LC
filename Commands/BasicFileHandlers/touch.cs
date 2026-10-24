@@ -32,6 +32,8 @@ public static class touch
                 Name = dirAndName[0],
                 Directory = DirectoryHandler.StringToDirectory(dirAndName[1])
             };
+            
+            Pseudo_RealTerm.Logger.LogMessage(dirAndName[1]);
 
             if (FileHandler.FileExits(newFile))
             {
