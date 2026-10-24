@@ -13,6 +13,12 @@ public class TerminalPatch
     
     public static bool OldTerminal = false;
 
+    /// <summary>
+    /// Writes to the terminal screen
+    /// </summary>
+    /// <param name="text">The text to write</param>
+    /// <param name="instance">The terminal screen instance to write to</param>
+    /// <param name="replace">If it replaces all text, or appends to it</param>
     public static void WriteToTerminal(string text, Terminal instance, bool replace = true)
     {
         TerminalNode returnNode = ScriptableObject.CreateInstance<TerminalNode>();
@@ -61,14 +67,22 @@ public class TerminalPatch
             }
             else // Main functionality 
             {
-                TermLine line = new TermLine(rawInputText);
+                TermLine line = new TermLine(rawInputText); // Parse the input
+                bool commandRecognized = false;
                 
-                foreach (var command in TerminalCommandAttributeCollector.Commands) // For each command that was collected
+                // Checks the line command against each collected command, and run it if it matches
+                foreach (var command in TerminalCommandAttributeCollector.Commands) 
                 {
-                    if ((string) command.GetField("Command").GetValue(null) // equivalent to old.Command == line.Command and etc
-                        == line.Command)
-                    { command.GetMethod("Run")?.Invoke(null, [__instance, line]); } // equivalent to old.Run(__instance, line) and etc
+                    // equivalent to old.Command == line.Command and etc
+                    if ((string)command.GetField("Command").GetValue(null) == line.Command)
+                    {
+                        command.GetMethod("Run")?.Invoke(null, [__instance, line]); // equivalent to old.Run(__instance, line) and etc
+                        commandRecognized = true;
+                        break; // Slightly better for performance to break
+                    } 
                 }
+                
+                if (!commandRecognized) { WriteToTerminal(line.Command + " not recognized", __instance, false); }
                 
                 // Copied from source, resets everything
                 __instance.modifyingText = true;
