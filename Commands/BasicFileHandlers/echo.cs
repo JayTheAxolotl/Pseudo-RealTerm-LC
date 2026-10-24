@@ -12,19 +12,26 @@ public static class echo
     
     public static void Run(Terminal instance, TermLine line)
     {
-        const string usage = "echo [options] [arguments]\n" +
+        const string usage = "echo [Options] [Arguments]\n" +
                 "Options:\n" +
-                "--help : display this text";
+                "--help    : display this text\n" +
+                "--options : return all given options, valid or not";
         const bool replaceText = false;
         
         string returnText;
-                    
-        if (line.arguments.Count > 0)
-        { returnText = line.arguments.Join(delimiter: " ") + "\n"; }
+        
+        if (line.Arguments.Count > 0)
+        { returnText = line.Arguments.Join(delimiter: " ") + "\n"; }
         else
-        { returnText = "No arguments given\n" + usage; }
+        { returnText = "No Arguments given\n" + usage; }
+        
+        if (line.Options.Contains("--options"))
+        {
+            returnText = "";
+            foreach (var option in line.Options) { returnText += option + "\n"; }
+        }
 
-        if (line.options.Contains("--help"))
+        if (line.Options.Contains("--help"))
         {
             returnText = usage;
         }

@@ -3,49 +3,65 @@ using System.Linq;
 
 namespace Pseudo_RealTerm.Classes;
 
-public class TermLine // Class for parsing lines in the terminal
+/// Class for parsing lines from the terminal, with a command, Arguments, and Options
+public class TermLine 
 {
-
-    public string Command;
-    public string[] RawLine;
+    private string[] _rawLine;
     
-    public List<string> arguments = new List<string>(); // Set so they are never null
-    public List<string> options = new List<string>();
+    /// The first word in the given line
+    public string Command; 
+    
+    /// Words in the line that start with a hyphen ("-") or double hyphen ("--")
+    public List<string> Options = []; // Set so it is never null
+    
+    /// Every other word in the line that was not the Command, or an Option
+    public List<string> Arguments = []; // Set so it is never null
+    
     
     public TermLine(string rawLine)
     {
-        this.RawLine = rawLine.ToLower().Split(' ');
-        this.Command = this.RawLine[0];
-        
-        // i starts at 1 to skip this.Command
-        for (int i = 1; i < this.RawLine.Length; i++)
+        this._rawLine = rawLine.ToLower().Split(' ');
+        this.Command = this._rawLine[0];
+
+        foreach (var thing in _rawLine)
         {
-            // If it is an option, add it to options
-            if (this.RawLine[i].StartsWith("-")) 
-            { this.options.Add(this.RawLine[i]); }
-            else // If it isn't then it's an argument
-            { this.arguments.Add(this.RawLine[i]); }
+            if (thing == this.Command) { continue; } // Skip command
+            
+            // If it is an option, add it to Options
+            if (thing.StartsWith("--")) // Full word options
+            { this.Options.Add(thing); }
+            else if (thing.StartsWith("-")) // Single letter options
+            {
+                // Done this way to ensure combined single letter options are equivalent to not combined ones
+                // E.G "ls -al" == "ls -a -l"
+                foreach (var option in thing)
+                {
+                    if (option == '-') { continue; }
+                    this.Options.Add("-" + option);
+                }
+            }
+            else // If it isn't an option then it's an argument
+            { this.Arguments.Add(thing); }
         }
-        
     }
     
     public void debugPrint()
     {
-        foreach (var thing in this.RawLine)
+        foreach (var thing in this._rawLine)
         {
             Pseudo_RealTerm.Logger.LogMessage("thing: " + thing);
         }
         
         Pseudo_RealTerm.Logger.LogMessage("Command " + this.Command);
         
-        foreach (var option in this.options)
+        foreach (var option in this.Options)
         {
-            Pseudo_RealTerm.Logger.LogMessage("option: " + option);
+            Pseudo_RealTerm.Logger.LogMessage("Option: " + option);
         }
         
-        foreach (var argument in this.arguments)
+        foreach (var argument in this.Arguments)
         {
-            Pseudo_RealTerm.Logger.LogMessage("arg: " + argument);
+            Pseudo_RealTerm.Logger.LogMessage("Arg: " + argument);
         }
     }
 
