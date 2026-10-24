@@ -7,7 +7,6 @@ public class TermLine // Class for parsing lines in the terminal
 {
 
     public string Command;
-    public Directory LineDirectory = new Directory();
     public string[] RawLine;
     
     public List<string> arguments = new List<string>(); // Set so they are never null

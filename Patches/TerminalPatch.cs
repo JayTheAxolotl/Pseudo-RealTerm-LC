@@ -13,8 +13,6 @@ public class TerminalPatch
     
     public static bool OldTerminal = false;
 
-    public static Directory CurrentDirectory = new Directory();
-
     public static void WriteToTerminal(string text, Terminal instance, bool replace = true)
     {
         TerminalNode returnNode = ScriptableObject.CreateInstance<TerminalNode>();
@@ -37,9 +35,6 @@ public class TerminalPatch
     private static void BeginUsingTerminalPostfix(Terminal __instance)
     {
         OldTerminal = false; // Reset to custom terminal
-
-        CurrentDirectory.IsAbsolute = true;
-        CurrentDirectory.Path = [];
         
         WriteToTerminal("PseudoS v0.2\n" + 
                         "Type \"help\" for help", __instance);
@@ -67,7 +62,6 @@ public class TerminalPatch
             else // Main functionality 
             {
                 TermLine line = new TermLine(rawInputText);
-                line.LineDirectory = CurrentDirectory;
                 
                 foreach (var command in TerminalCommandAttributeCollector.Commands) // For each command that was collected
                 {
