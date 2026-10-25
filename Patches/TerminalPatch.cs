@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Pseudo_RealTerm.Classes;
+using Pseudo_RealTerm.Classes.FileSystem;
 using UnityEngine;
 
 namespace Pseudo_RealTerm.Patches;
@@ -12,6 +13,8 @@ public class TerminalPatch
     private static bool _exitingTerminal = false;
     
     public static bool OldTerminal = false;
+
+    public static Path CurrentPath;
 
     /// <summary>
     /// Writes to the terminal screen
@@ -44,6 +47,8 @@ public class TerminalPatch
         
         WriteToTerminal("PseudoS v0.2\n" + 
                         "Type \"help\" for help", __instance);
+
+        CurrentPath = new Path("/");
     }
     
     

@@ -28,7 +28,10 @@ public class Directory : BaseFileType
 
             if (file.GetType() == typeof(Directory))
             {
-                return ((Directory) file).ObjectIsInside(uid);
+                if(((Directory) file).ObjectIsInside(uid))
+                {
+                    return true;
+                }
             }
         }
 
@@ -43,7 +46,10 @@ public class Directory : BaseFileType
 
             if (file.GetType() == typeof(Directory))
             {
-                return ((Directory) file).GetPathOfObject(uid, currentPath.Append(Name));
+                if (((Directory) file).GetPathOfObject(uid, currentPath.Append(Name)) != null)
+                {
+                    return ((Directory) file).GetPathOfObject(uid, currentPath.Append(Name));
+                }
             }
         }
 
@@ -56,11 +62,21 @@ public class Directory : BaseFileType
         {
             if (directory.GetType() == typeof(Directory))
             {
-                if (directory.Name == path.PathList[depth] 
+                if (path.PathList.Length < depth + 1) { return null; } // Avoid index out of bounds exception
+                
+                Pseudo_RealTerm.Logger.LogMessage(directory.Name);
+                Pseudo_RealTerm.Logger.LogMessage(path.PathList[depth]);
+                Pseudo_RealTerm.Logger.LogMessage(depth + 1);
+                Pseudo_RealTerm.Logger.LogMessage(path.PathList.Length);
+                
+                if (directory.Name == path.PathList[depth]
                     && depth == path.PathList.Length - 1) // Ensure the search is at the end of the path, and not in the middle before returning
                 {return (Directory) directory;}
                 
-                return ((Directory) directory).GetDirectoryFromPath(path, depth + 1);
+                if (((Directory)directory).GetDirectoryFromPath(path, depth + 1) != null)
+                {
+                    return ((Directory) directory).GetDirectoryFromPath(path, depth + 1);
+                }
             }
         }
         

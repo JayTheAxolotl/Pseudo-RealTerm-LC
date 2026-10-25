@@ -35,5 +35,10 @@ public class Path
         else { return new Path(PathString + path); }
     }
 
+    public static bool WouldBeAbsolute(string pathString)
+    {
+        return pathString.StartsWith("/");
+    }
+
     public override string ToString() { return PathString; }
 }

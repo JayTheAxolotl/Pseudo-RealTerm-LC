@@ -21,7 +21,7 @@ public static class MasterDirectory
             if (file.GetType() == typeof(Directory))
             {
                 if (((Directory)file).ObjectIsInside(uid)) 
-                { return ((Directory)file).GetPathOfObject(uid, new Path("/")); }
+                { return ((Directory) file).GetPathOfObject(uid, new Path("/")); }
             }
         }
         

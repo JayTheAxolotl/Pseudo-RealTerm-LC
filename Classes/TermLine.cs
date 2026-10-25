@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Pseudo_RealTerm.Classes.FileSystem;
 
 namespace Pseudo_RealTerm.Classes;
 
@@ -16,7 +17,6 @@ public class TermLine
     
     /// Every other word in the line that was not the Command, or an Option
     public List<string> Arguments = []; // Set so it is never null
-    
     
     public TermLine(string rawLine)
     {
