@@ -14,8 +14,7 @@ public static class help
         const string usage = "old                        : switch to vanilla terminal\n" +
                              "echo [options] [arguments] : repeat what is told to it\n" +
                              "clear                      : clear all text\n" +
-                             "touch [options] [filename] : Make a file\n" +
-                             "ls [options] [dir]         : list files in a directory";
+                             "di                         : Debug interact with the filesystem";
         const bool replaceText = false;
 
         string returnText = usage;
