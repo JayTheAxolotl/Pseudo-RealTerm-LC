@@ -7,7 +7,7 @@ namespace Pseudo_RealTerm.Classes;
 
 public static class MasterDirectory
 {
-    //[ModData(SaveWhen.OnSave, LoadWhen.OnLoad, SaveLocation.CurrentSave)]
+    [ModData(SaveWhen.OnSave, LoadWhen.OnLoad, SaveLocation.CurrentSave)]
     public static Directory FileSystem = new Directory("/");
 
     
