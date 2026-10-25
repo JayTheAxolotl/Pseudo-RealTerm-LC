@@ -52,7 +52,6 @@ public class TerminalPatch
     [HarmonyPrefix]
     private static void OnSubmitPrefix(Terminal __instance)
     {
-        
         string rawInputText =
             __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded); // This is copied from the decompiled source, wtf is this Zeekers
 
@@ -120,6 +119,15 @@ public class TerminalPatch
     private static void QuitTerminalPrefix(Terminal __instance)
     {
         _exitingTerminal = true;
+    }
+
+    [HarmonyPatch("TextChanged")]
+    [HarmonyPrefix]
+    private static void TextChangedPrefix(Terminal __instance)
+    {
+        if ((UnityEngine.Object) __instance.currentNode == (UnityEngine.Object) null)
+            return;
+        __instance.currentNode.maxCharactersToType = 1024; // Virtually remove the character limit
     }
     
 }
