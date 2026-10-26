@@ -14,7 +14,7 @@ public class TerminalPatch
     
     public static bool OldTerminal = false;
 
-    public static Path CurrentPath;
+    public static Path WorkingPath;
 
     /// <summary>
     /// Writes to the terminal screen
@@ -22,16 +22,24 @@ public class TerminalPatch
     /// <param name="text">The text to write</param>
     /// <param name="instance">The terminal screen instance to write to</param>
     /// <param name="replace">If it replaces all text, or appends to it</param>
-    public static void WriteToTerminal(string text, Terminal instance, bool replace = true)
+    /// <param name="showPrompt">If the prompt (working path) is shown</param>
+    public static void WriteToTerminal(string text, Terminal instance, bool replace = true, bool showPrompt = true)
     {
         TerminalNode returnNode = ScriptableObject.CreateInstance<TerminalNode>();
 
         if (replace)
-        { returnNode.displayText = text + "\n"; }
+        {
+            returnNode.displayText = text + "\n";
+        }
         else
-        { returnNode.displayText = instance.screenText.text.Replace("\n\n\n", "") + "\n" + text + "\n"; }
-        
-        returnNode.clearPreviousText = true; // make it always replaces the previous text, letting me control replacing better
+        {
+            returnNode.displayText = instance.screenText.text.Replace("\n\n\n", "") + "\n" + text + "\n";
+        }
+
+        if (showPrompt) 
+        { returnNode.displayText += WorkingPath.PathString + " > "; }
+
+    returnNode.clearPreviousText = true; // make it always replaces the previous text, letting me control replacing better
         
         instance.LoadNewNode(returnNode);
 
@@ -45,10 +53,10 @@ public class TerminalPatch
     {
         OldTerminal = false; // Reset to custom terminal
         
+        WorkingPath = new Path("/"); // Reset path on open
+        
         WriteToTerminal("PseudoS v0.2\n" + 
                         "Type \"help\" for help", __instance);
-
-        CurrentPath = new Path("/");
     }
     
     

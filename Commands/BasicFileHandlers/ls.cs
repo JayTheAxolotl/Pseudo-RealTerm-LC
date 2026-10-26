@@ -22,7 +22,7 @@ public static class ls
 
         if (line.Arguments.Count == 0)
         {
-            listedPath = TerminalPatch.CurrentPath;
+            listedPath = TerminalPatch.WorkingPath;
         }
         else
         {
@@ -36,7 +36,7 @@ public static class ls
             }
             else
             {
-                listedPath = TerminalPatch.CurrentPath.Append(line.Arguments[0]);
+                listedPath = TerminalPatch.WorkingPath.Append(line.Arguments[0]);
             }
         }
         
