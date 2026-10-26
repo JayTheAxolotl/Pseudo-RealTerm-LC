@@ -3,7 +3,7 @@ using Pseudo_RealTerm.Classes;
 using Pseudo_RealTerm.Classes.FileSystem;
 using Pseudo_RealTerm.Patches;
 
-namespace Pseudo_RealTerm.Commands;
+namespace Pseudo_RealTerm.Commands.BasicFileHandlers;
 
 [TerminalCommand]
 public static class ls
