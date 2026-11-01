@@ -21,7 +21,7 @@ public static class mkdir
 
         if (line.Arguments.Count == 0)
         {
-            returnText = "No arguments given" + usage;
+            returnText = "No arguments given \n" + usage;
         }
         else
         {
