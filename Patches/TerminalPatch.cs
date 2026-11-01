@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Pseudo_RealTerm.Classes;
+using Pseudo_RealTerm.Classes.FileSystem;
 using UnityEngine;
 
 namespace Pseudo_RealTerm.Patches;
@@ -13,18 +14,32 @@ public class TerminalPatch
     
     public static bool OldTerminal = false;
 
-    public static Directory CurrentDirectory = new Directory();
+    public static Path WorkingPath;
 
-    public static void WriteToTerminal(string text, Terminal instance, bool replace = true)
+    /// <summary>
+    /// Writes to the terminal screen
+    /// </summary>
+    /// <param name="text">The text to write</param>
+    /// <param name="instance">The terminal screen instance to write to</param>
+    /// <param name="replace">If it replaces all text, or appends to it</param>
+    /// <param name="showPrompt">If the prompt (working path) is shown</param>
+    public static void WriteToTerminal(string text, Terminal instance, bool replace = true, bool showPrompt = true)
     {
         TerminalNode returnNode = ScriptableObject.CreateInstance<TerminalNode>();
 
         if (replace)
-        { returnNode.displayText = text + "\n"; }
+        {
+            returnNode.displayText = text + "\n";
+        }
         else
-        { returnNode.displayText = instance.screenText.text.Replace("\n\n\n", "") + "\n" + text + "\n"; }
-        
-        returnNode.clearPreviousText = true; // make it always replaces the previous text, letting me control replacing better
+        {
+            returnNode.displayText = instance.screenText.text.Replace("\n\n\n", "") + "\n" + text + "\n";
+        }
+
+        if (showPrompt) 
+        { returnNode.displayText += WorkingPath.PathString + " > "; }
+
+    returnNode.clearPreviousText = true; // make it always replaces the previous text, letting me control replacing better
         
         instance.LoadNewNode(returnNode);
 
@@ -37,9 +52,8 @@ public class TerminalPatch
     private static void BeginUsingTerminalPostfix(Terminal __instance)
     {
         OldTerminal = false; // Reset to custom terminal
-
-        CurrentDirectory.IsAbsolute = true;
-        CurrentDirectory.Path = [];
+        
+        WorkingPath = new Path("/"); // Reset path on open
         
         WriteToTerminal("PseudoS v0.2\n" + 
                         "Type \"help\" for help", __instance);
@@ -51,7 +65,6 @@ public class TerminalPatch
     [HarmonyPrefix]
     private static void OnSubmitPrefix(Terminal __instance)
     {
-        
         string rawInputText =
             __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded); // This is copied from the decompiled source, wtf is this Zeekers
 
@@ -66,15 +79,22 @@ public class TerminalPatch
             }
             else // Main functionality 
             {
-                TermLine line = new TermLine(rawInputText);
-                line.LineDirectory = CurrentDirectory;
+                TermLine line = new TermLine(rawInputText); // Parse the input
+                bool commandRecognized = false;
                 
-                foreach (var command in TerminalCommandAttributeCollector.Commands) // For each command that was collected
+                // Checks the line command against each collected command, and run it if it matches
+                foreach (var command in TerminalCommandAttributeCollector.Commands) 
                 {
-                    if ((string) command.GetField("Command").GetValue(null) // equivalent to old.Command == line.Command and etc
-                        == line.Command)
-                    { command.GetMethod("Run")?.Invoke(null, [__instance, line]); } // equivalent to old.Run(__instance, line) and etc
+                    // equivalent to old.Command == line.Command and etc
+                    if ((string)command.GetField("Command").GetValue(null) == line.Command)
+                    {
+                        command.GetMethod("Run")?.Invoke(null, [__instance, line]); // equivalent to old.Run(__instance, line) and etc
+                        commandRecognized = true;
+                        break; // Slightly better for performance to break
+                    } 
                 }
+                
+                if (!commandRecognized) { WriteToTerminal(line.Command + " not recognized", __instance, false); }
                 
                 // Copied from source, resets everything
                 __instance.modifyingText = true;
@@ -112,6 +132,15 @@ public class TerminalPatch
     private static void QuitTerminalPrefix(Terminal __instance)
     {
         _exitingTerminal = true;
+    }
+
+    [HarmonyPatch("TextChanged")]
+    [HarmonyPrefix]
+    private static void TextChangedPrefix(Terminal __instance)
+    {
+        if ((UnityEngine.Object) __instance.currentNode == (UnityEngine.Object) null)
+            return;
+        __instance.currentNode.maxCharactersToType = 1024; // Virtually remove the character limit
     }
     
 }

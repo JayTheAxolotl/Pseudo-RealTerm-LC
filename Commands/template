@@ -20,7 +20,7 @@ public static class COMMANDNAME
                     
         // Main Code Here
 
-        if (line.options.Contains("--help"))
+        if (line.Options.Contains("--help"))
         {
             returnText = usage;
         }

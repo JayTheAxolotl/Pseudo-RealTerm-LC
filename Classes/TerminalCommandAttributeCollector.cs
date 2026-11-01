@@ -5,7 +5,7 @@ using Pseudo_RealTerm.Attributes;
 
 namespace Pseudo_RealTerm.Classes;
 
-public class TerminalCommandAttributeCollector
+public static class TerminalCommandAttributeCollector
 {
     public static List<Type> Commands = [];
     
@@ -14,29 +14,21 @@ public class TerminalCommandAttributeCollector
     {
         foreach (Type loadableType in Pseudo_RealTerm.Instance.GetType().Assembly.GetLoadableTypes())
         {
-            TerminalCommandAttributeCollector.RegisterTerminalLineAttributes(MyPluginInfo.PLUGIN_GUID, loadableType);
+            RegisterTerminalLineAttributes(MyPluginInfo.PLUGIN_GUID, loadableType);
         }
     }
     
-    /// <summary>
-    ///     Registers all fields and properties decorated with ModData attributes in the given type.
-    /// </summary>
-    /// <param name="guid"> GUID of the plugin that registered the fields. </param>
-    /// <param name="type"> Type to register the fields from. </param>
-    /// <param name="instance"> Instance of the class to register the fields from. </param>
-    /// <param name="keySuffix"> Suffix to append to the key. </param>
+    /// Registers all fields and properties decorated with TerminalCommandAttribute attributes in the given type.
     internal static void RegisterTerminalLineAttributes(
         string guid,
-        Type type,
-        object? instance = null,
-        string? keySuffix = null)
+        Type type)
     {
         try
         {
-            TerminalCommandAttribute commandAttribute = (TerminalCommandAttribute)Attribute.GetCustomAttribute(type, typeof(TerminalCommandAttribute));
+            TerminalCommandAttribute commandAttribute = (TerminalCommandAttribute) Attribute.GetCustomAttribute(type, typeof(TerminalCommandAttribute));
             if (commandAttribute != null)
             {
-                Pseudo_RealTerm.Logger.LogMessage($"Registering {type} with {guid}");
+                Pseudo_RealTerm.Logger.LogDebug($"Registering command {type}");
                 Commands.Add(type);
             }
         }

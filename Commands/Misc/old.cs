@@ -18,6 +18,6 @@ public static class old
         
         TerminalPatch.OldTerminal = true;
         
-        TerminalPatch.WriteToTerminal(returnText, instance, replaceText);
+        TerminalPatch.WriteToTerminal(returnText, instance, replaceText, false);
     }
 }

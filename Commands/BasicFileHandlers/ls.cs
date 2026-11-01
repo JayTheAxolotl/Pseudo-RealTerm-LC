@@ -1,5 +1,6 @@
 using Pseudo_RealTerm.Attributes;
 using Pseudo_RealTerm.Classes;
+using Pseudo_RealTerm.Classes.FileSystem;
 using Pseudo_RealTerm.Patches;
 
 namespace Pseudo_RealTerm.Commands.BasicFileHandlers;
@@ -11,49 +12,54 @@ public static class ls
     
     public static void Run(Terminal instance, TermLine line)
     {
-        const string usage = "ls [options] [dir]\n"+ 
-                             "Options:\n" + 
+        const string usage = "ls [options] [directory]\n" +
+                             "Options:\n" +
                              "--help : display this text";
         const bool replaceText = false;
         
         string returnText = "";
+        Path listedPath;
 
-        if (line.arguments.Count > 0)
+        if (line.Arguments.Count == 0)
         {
-            string[] splitArgumentsPath = FileHandler.SplitFullPath(line.arguments[0]);
-            if (splitArgumentsPath[1] != "")
-            {
-                line.LineDirectory = new Directory();
-            }
+            listedPath = TerminalPatch.WorkingPath;
         }
-
-        FileHandler.LoadFiles();
-        foreach (var file in FileHandler.FileList)
+        else
         {
-            if (file.Directory.ToString() == line.LineDirectory.ToString())
+            if (line.Arguments[0] == "/")
             {
-                returnText += file.Name + "   ";
+                listedPath = new Path("/");
+            }
+            else if (Path.WouldBeAbsolute(line.Arguments[0]))
+            {
+                listedPath = new Path(line.Arguments[0]);
+            }
+            else
+            {
+                listedPath = TerminalPatch.WorkingPath.Append(line.Arguments[0]);
             }
         }
         
-        DirectoryHandler.LoadDirs();
-        foreach (var directory in DirectoryHandler.DirectoryList)
-        {
-            Pseudo_RealTerm.Logger.LogMessage(directory.ToString().Replace(line.LineDirectory.ToString(), ""));
-            Pseudo_RealTerm.Logger.LogMessage(directory.ToString());
-            Pseudo_RealTerm.Logger.LogMessage(line.LineDirectory.ToString());
-            // Two of these because it removes both "/"s when in the root directory
-            if (directory.ToString().Replace(line.LineDirectory.ToString(), "") == directory.Path[^1])
-            {
-                returnText += directory.ToString().Replace(line.LineDirectory.ToString(), "") + "/   ";
-            }
-            else if (directory.ToString().Replace(line.LineDirectory.ToString(), "") == directory.Path[^1] + "/")
-            {
-                returnText += directory.ToString().Replace(line.LineDirectory.ToString(), "") + "   ";
-            }
-        }
+        Directory listedDirectory;
+        
+        if (listedPath.PathString == "/")
+        { listedDirectory = MasterDirectory.FileSystem; }
+        else
+        { listedDirectory = MasterDirectory.FileSystem.GetDirectoryFromPath(listedPath); }
 
-        if (line.options.Contains("--help"))
+        if (listedDirectory != null) // Avoid null exception
+        {
+            foreach (var file in listedDirectory.Contents)
+            {
+                if (file.GetType() == typeof(File))
+                { returnText += "F " + file.Name + "   "; }
+                else
+                { returnText += "D " + file.Name + "   "; }
+            } 
+        } 
+        else { returnText = "Directory not found"; } 
+
+        if (line.Options.Contains("--help"))
         {
             returnText = usage;
         }

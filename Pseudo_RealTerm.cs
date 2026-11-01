@@ -1,6 +1,8 @@
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using LethalModDataLib.Attributes;
+using LethalModDataLib.Enums;
 using Pseudo_RealTerm.Classes;
 using Pseudo_RealTerm.Commands;
 
@@ -13,7 +15,17 @@ public class Pseudo_RealTerm : BaseUnityPlugin
     public static Pseudo_RealTerm Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
     internal static Harmony? Harmony { get; set; }
-
+    
+    [ModData(SaveWhen.OnSave, LoadWhen.OnLoad, SaveLocation.CurrentSave)]
+    private static int _nextUID;
+    
+    /// Returns and iterates a unique identifier for Files and Directories.
+    /// Saved between saves
+    public static int NextUID()
+    {
+        return _nextUID++;
+    }
+    
     private void Awake()
     {
         Logger = base.Logger;
