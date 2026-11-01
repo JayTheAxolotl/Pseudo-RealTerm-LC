@@ -64,11 +64,6 @@ public class Directory : BaseFileType
             {
                 if (path.PathList.Length < depth + 1) { return null; } // Avoid index out of bounds exception
                 
-                Pseudo_RealTerm.Logger.LogMessage(directory.Name);
-                Pseudo_RealTerm.Logger.LogMessage(path.PathList[depth]);
-                Pseudo_RealTerm.Logger.LogMessage(depth + 1);
-                Pseudo_RealTerm.Logger.LogMessage(path.PathList.Length);
-                
                 if (directory.Name == path.PathList[depth]
                     && depth == path.PathList.Length - 1) // Ensure the search is at the end of the path, and not in the middle before returning
                 {return (Directory) directory;}
@@ -76,6 +71,28 @@ public class Directory : BaseFileType
                 if (((Directory)directory).GetDirectoryFromPath(path, depth + 1) != null)
                 {
                     return ((Directory) directory).GetDirectoryFromPath(path, depth + 1);
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    public BaseFileType GetObjectFromPath(Path path, int depth = 0)
+    {
+        foreach (var file in Contents)
+        {
+            if (path.PathList.Length < depth + 1) { return null; } // Avoid index out of bounds exception
+                            
+            if (file.Name == path.PathList[depth]
+                && depth == path.PathList.Length - 1) // Ensure the search is at the end of the path, and not in the middle before returning
+            {return file;}
+            
+            if (file.GetType() == typeof(Directory))
+            {
+                if (((Directory)file).GetObjectFromPath(path, depth + 1) != null)
+                {
+                    return ((Directory) file).GetObjectFromPath(path, depth + 1);
                 }
             }
         }
