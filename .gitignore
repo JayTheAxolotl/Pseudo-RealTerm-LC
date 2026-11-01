@@ -1,3 +1,6 @@
 /obj
 /bin
 /Pseudo-RealTerm.sln.DotSettings.user
+/.mortar/project.json
+/artifacts/bin/Pseudo-RealTerm/debug/Pseudo-RealTerm.deps.json
+/artifacts/bin/Pseudo-RealTerm/debug/Pseudo-RealTerm.dll
