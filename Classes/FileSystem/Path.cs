@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,7 +6,7 @@ namespace Pseudo_RealTerm.Classes.FileSystem;
 public class Path
 {
     public string PathString;
-    public string[] PathList;
+    public List<string> PathList;
     public bool IsAbsolute;
 
     public Path(string path)
@@ -18,12 +17,11 @@ public class Path
 
         if (IsAbsolute)
         {
-            List<string> PathListL = PathString.Split("/").ToList();
-            PathListL.RemoveAt(0);
-            PathList = PathListL.ToArray();
+            PathList = PathString.Split("/").ToList();
+            PathList.RemoveAt(0);
         }
         else
-        { PathList = PathString.Split('/'); }
+        { PathList = PathString.Split('/').ToList(); }
     }
     
     /// Returns a new path with the given path added onto it

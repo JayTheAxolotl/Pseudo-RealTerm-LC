@@ -62,10 +62,10 @@ public class Directory : BaseFileType
         {
             if (directory.GetType() == typeof(Directory))
             {
-                if (path.PathList.Length < depth + 1) { return null; } // Avoid index out of bounds exception
+                if (path.PathList.Count < depth + 1) { return null; } // Avoid index out of bounds exception
                 
                 if (directory.Name == path.PathList[depth]
-                    && depth == path.PathList.Length - 1) // Ensure the search is at the end of the path, and not in the middle before returning
+                    && depth == path.PathList.Count - 1) // Ensure the search is at the end of the path, and not in the middle before returning
                 {return (Directory) directory;}
                 
                 if (((Directory)directory).GetDirectoryFromPath(path, depth + 1) != null)
@@ -82,10 +82,10 @@ public class Directory : BaseFileType
     {
         foreach (var file in Contents)
         {
-            if (path.PathList.Length < depth + 1) { return null; } // Avoid index out of bounds exception
+            if (path.PathList.Count < depth + 1) { return null; } // Avoid index out of bounds exception
                             
             if (file.Name == path.PathList[depth]
-                && depth == path.PathList.Length - 1) // Ensure the search is at the end of the path, and not in the middle before returning
+                && depth == path.PathList.Count - 1) // Ensure the search is at the end of the path, and not in the middle before returning
             {return file;}
             
             if (file.GetType() == typeof(Directory))
