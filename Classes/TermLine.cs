@@ -49,19 +49,19 @@ public class TermLine
     {
         foreach (var thing in this._rawLine)
         {
-            Pseudo_RealTerm.Logger.LogMessage("thing: " + thing);
+            Pseudo_RealTerm.Logger.LogDebug("thing: " + thing);
         }
         
-        Pseudo_RealTerm.Logger.LogMessage("Command " + this.Command);
+        Pseudo_RealTerm.Logger.LogDebug("Command " + this.Command);
         
         foreach (var option in this.Options)
         {
-            Pseudo_RealTerm.Logger.LogMessage("Option: " + option);
+            Pseudo_RealTerm.Logger.LogDebug("Option: " + option);
         }
         
         foreach (var argument in this.Arguments)
         {
-            Pseudo_RealTerm.Logger.LogMessage("Arg: " + argument);
+            Pseudo_RealTerm.Logger.LogDebug("Arg: " + argument);
         }
     }
 

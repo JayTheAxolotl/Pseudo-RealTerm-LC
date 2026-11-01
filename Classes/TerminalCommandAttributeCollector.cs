@@ -28,7 +28,7 @@ public static class TerminalCommandAttributeCollector
             TerminalCommandAttribute commandAttribute = (TerminalCommandAttribute) Attribute.GetCustomAttribute(type, typeof(TerminalCommandAttribute));
             if (commandAttribute != null)
             {
-                Pseudo_RealTerm.Logger.LogMessage($"Registering {type} with {guid}");
+                Pseudo_RealTerm.Logger.LogDebug($"Registering command {type}");
                 Commands.Add(type);
             }
         }

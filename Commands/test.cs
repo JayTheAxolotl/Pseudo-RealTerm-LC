@@ -45,7 +45,7 @@ public static class testcomd
                 foreach (var file in MasterDirectory.FileSystem.GetDirectoryFromPath(new Path(line.Arguments[0])).Contents)
                 {
                     returnText += file.Name + "\n";
-                    Pseudo_RealTerm.Logger.LogMessage(file.Name);
+                    Pseudo_RealTerm.Logger.LogDebug(file.Name);
                 }
             }
             else
@@ -53,7 +53,7 @@ public static class testcomd
                 foreach (var file in MasterDirectory.FileSystem.Contents)
                 {
                     returnText += file.Name + "\n";
-                    Pseudo_RealTerm.Logger.LogMessage(file.Name);
+                    Pseudo_RealTerm.Logger.LogDebug(file.Name);
                 }
             }
         }
